@@ -1,0 +1,61 @@
+```{}
+```
+
+---
+title: "Final Project"
+author: Tanner Smalling
+formatt: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: herehere
+#| fig-cap: "Loading code & Library"
+#| echo: false
+#| error: false
+library(tidyverse)
+library(gtsummary)
+library(here)
+pride <- read.csv(here::here("data", "pride_index.csv"))
+```
+
+@herehere is using campus pride data taken from <https://github.com/rfordatascience/tidytuesday#datasets> Campus Pride Index.
+
+There are approximately `r nrow(pride)` universities in this data-set.
+
+```{r}
+#| label: tbl_summary
+#| fig-cap: "Descriptive Statistics"
+tbl_summary(
+	pride,
+	by = campus_name,
+	include = c(campus_name, students, rating),
+	label = list(
+		campus_name = "University", 
+		students = "Student Population",
+		rating = "Rating"
+	))
+```
+
+Here are some summary statistics looking at University, population, and their rating. The mean rating is `r mean(pride$rating)` and median is `r median(pride$rating)`
+
+```{r}
+#| label: Regressions
+#| fig-cap: "Regression comparing population and school rating"
+regression <-  lm(students ~ rating, data = pride)
+tbl_regression(
+	regression,
+	intercept = TRUE
+)
+```
+
+@Regressions is the regressions being run on @tbl_summary
+
+```{r}
+#| label: Histogram
+#| fig-cap: "Histogram looking at frequency of student population"
+hist(pride$students)
+```
+
+Our @Histogram is covering the frequency of student populations.
